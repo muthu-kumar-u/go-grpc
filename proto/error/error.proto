@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package error;
+
+option go_package = "github.com/muthu-kumar-u/go-grpc/gen/go/proto/error;error";
+
+message Error {
+  string code = 1;
+  string message = 2;
+}

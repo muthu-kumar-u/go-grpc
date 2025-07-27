@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+package user;
+
+import "google/api/annotations.proto";      // For HTTP mapping
+import "validate/validate.proto";
+import "proto/error/error.proto";           
+
+option go_package = "github.com/muthu-kumar-u/go-grpc/gen/go/proto/user;user";
+
+service UserService {
+  rpc Create(CreateRequest) returns (CreateResponse) {
+    option (google.api.http) = {
+      post: "/v1/users"
+      body: "*"
+    };
+  }
+
+  rpc Read(ReadRequest) returns (ReadResponse) {
+    option (google.api.http) = {
+      get: "/v1/users/{id}"
+    };
+  }
+
+  rpc Update(UpdateRequest) returns (UpdateResponse) {
+    option (google.api.http) = {
+      put: "/v1/users/{id}"
+      body: "*"
+    };
+  }
+
+  rpc Delete(DeleteRequest) returns (DeleteResponse) {
+    option (google.api.http) = {
+      delete: "/v1/users/{id}"
+    };
+  }
+}
+
+// ─── Requests ─────────────────────────────────────
+message CreateRequest {
+  string name = 1 [(validate.rules).string = {min_len: 1}];
+  string email = 2 [(validate.rules).string = {email: true}];
+  string number = 3 [(validate.rules).string = {len: 10, pattern: "^[0-9]+$"}];
+}
+
+message ReadRequest {
+  int32 id = 1 [(validate.rules).int32 = {gt: 0}];
+}
+
+message UpdateRequest {
+  int32 id = 1 [(validate.rules).int32 = {gt: 0}];
+  string name = 2 [(validate.rules).string = {min_len: 1}];
+  string email = 3 [(validate.rules).string = {email: true}];
+  string number = 4 [(validate.rules).string = {len: 10, pattern: "^[0-9]+$"}];
+}
+
+message DeleteRequest {
+  int32 id = 1 [(validate.rules).int32 = {gt: 0}];
+}
+
+// ─── Responses ─────────────────────────────────────
+message CreateResponse {
+  int32 id = 1 [(validate.rules).int32 = {gt: 0}];
+  error.Error error = 2; 
+}
+
+message ReadResponse {
+  string name = 1;
+  string email = 2;
+  string number = 3;
+  error.Error error = 4; 
+}
+
+message UpdateResponse {
+  int32 id = 1;
+  error.Error error = 2;
+}
+
+message DeleteResponse {
+  string message = 1;
+  error.Error error = 2;
+}

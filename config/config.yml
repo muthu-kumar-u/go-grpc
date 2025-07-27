@@ -1,0 +1,9 @@
+server:
+  address: ":50051"
+  tls:
+    cert_file: "certs/tls/cert.pem"
+    key_file: "certs/tls/key.pem"
+
+auth:
+  jwt_private_key_file: "certs/jwt/private.pem"
+  jwt_public_key_file: "certs/jwt/public.pem"
